@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: task-api
-          image: torpeda808/devops-platform-app:v1.0.6-7fa04a2
+          image: torpeda808/devops-platform-app:v1.0.7-266a780
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
