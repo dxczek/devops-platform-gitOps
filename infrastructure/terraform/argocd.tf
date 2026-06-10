@@ -1,10 +1,4 @@
-﻿# =============================================================
-# ArgoCD - GitOps Continuous Delivery
-# =============================================================
-# Installs ArgoCD via Helm chart (avoids CRD size issues)
-# Then creates Application resource that watches GitOps repo
-# =============================================================
-
+﻿
 # Install ArgoCD via Helm chart
 resource "helm_release" "argocd" {
   name       = "argocd"
@@ -124,7 +118,7 @@ resource "kubectl_manifest" "task_management_app" {
   depends_on = [time_sleep.wait_for_argocd]
 }
 
-# Create ArgoCD Application for PostgreSQL database
+# Create argocd application for PostgreSQL database
 resource "kubectl_manifest" "postgres_app" {
   yaml_body = <<-YAML
     apiVersion: argoproj.io/v1alpha1
