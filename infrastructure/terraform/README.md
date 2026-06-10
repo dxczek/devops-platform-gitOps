@@ -1,83 +1,76 @@
-﻿# Terraform - Infrastructure as Code
+# Terraform – Infrastructure as Code
 
-This directory contains Terraform configuration for deploying the complete DevOps platform.
+Katalog zawiera config Terraform odpowiedzialną za przygotowanie środowiska platformy na klastrze Kubernetes.
 
-## Architecture
+## Zakres
 
-Terraform manages:
-- Kubernetes namespaces (task-management, argocd, monitoring)
-- ArgoCD installation
-- Prometheus + Grafana monitoring stack
-- ServiceMonitor for application metrics
-- ArgoCD Applications that sync from GitOps repo
+Za pomocą Terraform tworzone są następujące elementy:
 
-The application itself is deployed via ArgoCD from the GitOps repository.
+- namespace'y Kubernetes (`task-management`, `argocd`, `monitoring`),
+- instalacja ArgoCD,
+- monitoring stack oparty na Prometheus i Grafana,
+- ServiceMonitor zbierający metryki aplikacji,
+- aplikacje ArgoCD synchronizowane z repozytorium GitOps.
 
-## Prerequisites
+Sama aplikacja nie jest wdrażana przez Terraform. Odpowiada za to ArgoCD, które pobiera manifesty z repozytorium GitOps.
 
-- Terraform >= 1.5.0
-- kubectl configured with Minikube context
-- Helm installed
-- Running Minikube cluster
+## Wymagania
 
-## Usage
+- Terraform w wersji 1.5.0 lub nowszej,
+- skonfigurowany `kubectl` z kontekstem Minikube,
+- zainstalowany Helm,
+- uruchomiony klaster Minikube.
 
-### Initialize Terraform
+## Sposób użycia
+
+Inicjalizacja i pobranie wymaganych providerów:
 
 ```powershell
 terraform init
 ```
 
-### Preview changes
+Podgląd planowanych zmian przed ich wprowadzeniem:
 
 ```powershell
 terraform plan
 ```
 
-### Apply infrastructure
+Wdrożenie infrastruktury (po wyświetleniu planu należy potwierdzić operację wpisując `yes`):
 
 ```powershell
 terraform apply
 ```
 
-Type `yes` when prompted.
-
-### View outputs
+Wyświetlenie outputów:
 
 ```powershell
 terraform output
 ```
 
-### Destroy infrastructure
+Usunięcie utworzonych zasobów:
 
 ```powershell
 terraform destroy
 ```
 
-⚠️ This will delete all resources except the GitHub repos and Docker Hub images.
+Operacja `destroy` usuwa wszystkie zasoby utworzone przez Terraform. Nie obejmuje repozytoriów GitHub ani obrazów opublikowanych w Docker Hub.
 
-## Variables
+## Konfiguracja
 
-Edit `variables.tf` to customize:
-- Namespaces
-- Application image
-- Number of replicas
-- GitOps repository URL
-- Enable/disable monitoring
+Parametry konfiguracyjne znajdują się w pliku `variables.tf`. Można tam dostosować między innymi namespace'y, image aplikacji, liczbę replik, adres repozytorium GitOps oraz włączenie lub wyłączenie monitoringu.
 
-## Files
+## Pliki
 
-| File | Purpose |
-|------|---------|
-| `main.tf` | Main configuration |
-| `providers.tf` | Required providers (Kubernetes, Helm, Kubectl) |
-| `variables.tf` | Input variables |
-| `outputs.tf` | Output values |
-| `namespaces.tf` | Kubernetes namespaces |
-| `argocd.tf` | ArgoCD installation and Applications |
-| `monitoring.tf` | Prometheus + Grafana stack |
+| Plik | Przeznaczenie |
+|------|---------------|
+| `main.tf` | Konfiguracja główna |
+| `providers.tf` | Wymagane providery (Kubernetes, Helm, Kubectl) |
+| `variables.tf` | Zmienne wejściowe |
+| `outputs.tf` | Outputy |
+| `namespaces.tf` | Namespace'y Kubernetes |
+| `argocd.tf` | Instalacja ArgoCD oraz aplikacje |
+| `monitoring.tf` | Stack Prometheus i Grafana |
 
-## State
+## Terraform state
 
-Terraform state is stored locally in `terraform.tfstate`.
-In production, this would be stored in a remote backend (S3, Azure Storage, etc.).
+State przechowywany jest lokalnie w pliku `terraform.tfstate`. W środowisku produkcyjnym powinien zostać przeniesiony do zdalnego backendu, na przykład Amazon S3 lub Azure Storage.
