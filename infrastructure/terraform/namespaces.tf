@@ -1,8 +1,7 @@
-﻿# =============================================================
-# Kubernetes Namespaces
-# =============================================================
 
-# Namespace for the application
+# Kubernetes Namespaces
+
+# Namespace for the app
 resource "kubernetes_namespace" "task_management" {
   metadata {
     name = var.app_namespace
