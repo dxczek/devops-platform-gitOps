@@ -1,12 +1,8 @@
-﻿# Kustomize Overlay: DEVELOPMENT
-apiVersion: kustomize.config.k8s.io/v1beta1
+﻿apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 namespace: task-management
-
 resources:
   - ../../base/app
-
 patches:
   - target:
       kind: Deployment
@@ -15,7 +11,6 @@ patches:
       - op: replace
         path: /spec/replicas
         value: 2
-
   - target:
       kind: HorizontalPodAutoscaler
       name: task-api-hpa
@@ -26,11 +21,12 @@ patches:
       - op: replace
         path: /spec/maxReplicas
         value: 5
-
-commonLabels:
-  environment: dev
-  tier: development
-
+labels:
+  - pairs:
+      environment: dev
+      tier: development
+    includeSelectors: false
+    includeTemplates: true
 commonAnnotations:
   team: "devops"
   description: "Development environment"
