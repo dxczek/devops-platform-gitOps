@@ -1,9 +1,4 @@
-﻿# =============================================================
-# Monitoring Stack - Prometheus + Grafana
-# =============================================================
-# Installs kube-prometheus-stack via Helm
-# =============================================================
-
+﻿
 resource "helm_release" "kube_prometheus" {
   count = var.enable_monitoring ? 1 : 0
 
