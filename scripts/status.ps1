@@ -1,6 +1,4 @@
-﻿# =============================================================
-# GitOps Platform - Status Check
-# =============================================================
+﻿
 
 Write-Host ""
 Write-Host "=== STATUS PLATFORMY GITOPS ===" -ForegroundColor Cyan
