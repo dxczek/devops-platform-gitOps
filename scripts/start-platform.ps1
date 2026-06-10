@@ -1,6 +1,3 @@
-﻿# =============================================================
-# GitOps Platform - Start Script
-# =============================================================
 
 $ErrorActionPreference = "Continue"
 
@@ -27,10 +24,7 @@ function Write-ErrorMsg {
     Write-Host "  [ERROR] $Message" -ForegroundColor Red
 }
 
-# =============================================================
-# STEP 1: Sprawdz Docker Desktop
-# =============================================================
-Write-Step "STEP 1/5: Sprawdzanie Docker Desktop"
+Write-Step "STEP 1/5: Sprawdzanie docker desktop"
 
 $dockerRunning = $false
 try {
@@ -44,16 +38,14 @@ try {
 }
 
 if (-not $dockerRunning) {
-    Write-ErrorMsg "Docker Desktop NIE dziala!"
-    Write-Info "Uruchom Docker Desktop ze Start Menu."
-    Read-Host "Nacisnij Enter aby zakonczyc"
+    Write-ErrorMsg "Docker desktop NIE dziala"
+    Write-Info "uruchom docker Desktop ze Start Menu."
+    Read-Host "Nacisnij ENTER aby zakonczyc"
     exit 1
 }
 
-# =============================================================
-# STEP 2: Uruchom Minikube
-# =============================================================
-Write-Step "STEP 2/5: Uruchamianie Minikube"
+
+Write-Step "STEP 2/5: uruchamianie minikube"
 
 $minikubeStatus = minikube status --format='{{.Host}}' 2>$null
 
@@ -71,12 +63,10 @@ if ($minikubeStatus -eq "Running") {
     }
 }
 
-# =============================================================
-# STEP 3: Sprawdz pody
-# =============================================================
+
 Write-Step "STEP 3/5: Sprawdzanie statusu podow"
 
-Write-Info "Pody ArgoCD:"
+Write-Info "Pody argoCD:"
 kubectl get pods -n argocd --no-headers 2>$null | ForEach-Object { Write-Host "    $_" }
 
 Write-Info ""
@@ -87,10 +77,7 @@ Write-Info ""
 Write-Info "Pody monitoring:"
 kubectl get pods -n monitoring --no-headers 2>$null | ForEach-Object { Write-Host "    $_" }
 
-# =============================================================
-# STEP 4: Pobierz haslo ArgoCD
-# =============================================================
-Write-Step "STEP 4/5: Pobieranie hasla ArgoCD"
+Write-Step "STEP 4/5: Pobieranie hasla argoCD"
 
 $password = kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" 2>$null
 
@@ -103,38 +90,28 @@ if ($password) {
     Write-ErrorMsg "Nie mozna pobrac hasla ArgoCD"
 }
 
-# =============================================================
-# STEP 5: Uruchom port-forwards
-# =============================================================
 Write-Step "STEP 5/5: Uruchamianie port-forwards"
 
-# Zabij stare kubectl
 Write-Info "Zatrzymywanie starych port-forwards..."
 Get-Process kubectl -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Start-Sleep -Seconds 2
 
-# ArgoCD
 Write-Info "Uruchamianie ArgoCD na https://localhost:8090..."
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "Write-Host 'ArgoCD Port-Forward' -ForegroundColor Cyan; Write-Host 'URL: https://localhost:8090' -ForegroundColor Yellow; Write-Host 'Zostaw otwarte!' -ForegroundColor Red; kubectl port-forward -n argocd svc/argocd-server 8090:443"
 Start-Sleep -Seconds 2
 
-# Grafana
 Write-Info "Uruchamianie Grafany na http://localhost:3000..."
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "Write-Host 'Grafana Port-Forward' -ForegroundColor Cyan; Write-Host 'URL: http://localhost:3000' -ForegroundColor Yellow; Write-Host 'Login: admin / admin' -ForegroundColor Yellow; Write-Host 'Zostaw otwarte!' -ForegroundColor Red; kubectl port-forward -n monitoring svc/kube-prometheus-grafana 3000:80"
 Start-Sleep -Seconds 2
 
-# Task-API
 Write-Info "Uruchamianie Task-API na http://localhost:8080..."
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "Write-Host 'Task-API Port-Forward' -ForegroundColor Cyan; Write-Host 'URL: http://localhost:8080/docs' -ForegroundColor Yellow; Write-Host 'Zostaw otwarte!' -ForegroundColor Red; kubectl port-forward -n task-management svc/task-api 8080:8000"
 Start-Sleep -Seconds 2
 
-# Prometheus (poprawna nazwa)
 Write-Info "Uruchamianie Prometheus na http://localhost:9090..."
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "Write-Host 'Prometheus Port-Forward' -ForegroundColor Cyan; Write-Host 'URL: http://localhost:9090' -ForegroundColor Yellow; Write-Host 'Zostaw otwarte!' -ForegroundColor Red; kubectl port-forward -n monitoring svc/kube-prometheus-kube-prome-prometheus 9090:9090"
 
-# =============================================================
-# Podsumowanie
-# =============================================================
+
 Write-Step "GOTOWE! Platforma uruchomiona"
 
 Write-Host ""
