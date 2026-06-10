@@ -4,3 +4,10 @@
 *.tfstate.backup
 .terraform/
 .terraform.lock.hcl
+
+# Terraform state - wszystkie warianty
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.tfstate.bak
+*.backup
