@@ -1,12 +1,13 @@
 ﻿apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - app-deployment.yaml
   - app-service.yaml
   - app-secret.yaml
   - hpa.yaml
-
-commonLabels:
-  app.kubernetes.io/managed-by: kustomize
-  app.kubernetes.io/part-of: devops-platform
+labels:
+  - pairs:
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/part-of: devops-platform
+    includeSelectors: false
+    includeTemplates: true

@@ -1,12 +1,8 @@
-﻿# Kustomize Overlay: PRODUCTION
-apiVersion: kustomize.config.k8s.io/v1beta1
+﻿apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 namespace: task-management
-
 resources:
   - ../../base/app
-
 patches:
   - target:
       kind: Deployment
@@ -27,7 +23,6 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/resources/limits/cpu
         value: 1000m
-
   - target:
       kind: HorizontalPodAutoscaler
       name: task-api-hpa
@@ -38,14 +33,12 @@ patches:
       - op: replace
         path: /spec/maxReplicas
         value: 20
-      - op: replace
-        path: /spec/metrics/0/resource/target/averageUtilization
-        value: 60
-
-commonLabels:
-  environment: prod
-  tier: production
-
+labels:
+  - pairs:
+      environment: prod
+      tier: production
+    includeSelectors: false
+    includeTemplates: true
 commonAnnotations:
   team: "devops"
   description: "Production environment - high availability"
