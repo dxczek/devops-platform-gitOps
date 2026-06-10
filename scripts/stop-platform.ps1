@@ -1,12 +1,9 @@
-﻿# =============================================================
-# GitOps Platform - Stop Script
-# =============================================================
+﻿
 
 Write-Host ""
 Write-Host "Zatrzymywanie platformy..." -ForegroundColor Cyan
 Write-Host ""
 
-# Zatrzymaj wszystkie port-forwards
 Write-Host "  -> Zatrzymywanie port-forwards..." -ForegroundColor White
 
 Get-Process powershell -ErrorAction SilentlyContinue | Where-Object {
@@ -15,12 +12,11 @@ Get-Process powershell -ErrorAction SilentlyContinue | Where-Object {
     $_ | Stop-Process -Force -ErrorAction SilentlyContinue
 }
 
-# Alternatywnie - zabij wszystkie kubectl
+
 Get-Process kubectl -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
 Write-Host "  [OK] Port-forwards zatrzymane" -ForegroundColor Green
 
-# Pytaj czy zatrzymac Minikube
 Write-Host ""
 $answer = Read-Host "Zatrzymac tez Minikube? (oszczedza pamiec RAM) [y/N]"
 
