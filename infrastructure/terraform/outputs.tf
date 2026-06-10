@@ -1,7 +1,4 @@
-﻿# =============================================================
-# Terraform Outputs
-# =============================================================
-
+﻿
 output "project_info" {
   description = "Project information"
   value = {
@@ -65,10 +62,6 @@ output "gitops_info" {
 output "next_steps" {
   description = "What to do after deployment"
   value = <<-EOT
-
-  =============================================================
-  DEPLOYMENT COMPLETE!
-  =============================================================
 
   Run these commands to access the platform:
 
