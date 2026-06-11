@@ -1,4 +1,9 @@
 # devops-platform-gitOps
+*** WAZNE****
+ARGOCD MUSI BYC ODPALONE NA HTTP NA HTTPS NIE DZIALA TO BLAD PO STRONIE ARGOCD 
+*** WAZNE ***
+
+
 
 Repozytorium GitOps platformy zbudowanej na potrzeby pracy inżynierskiej. Pełni rolę pojedynczego źródła prawdy dla stanu klastra Kubernetes. Zawiera manifesty Kubernetes, konfigurację ArgoCD oraz kod Terraform odpowiedzialny za przygotowanie środowiska.
 
